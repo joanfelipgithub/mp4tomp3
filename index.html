@@ -7,270 +7,84 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #0a0a0a;
-      --surface: #111;
-      --border: #222;
-      --accent: #e8ff47;
-      --accent2: #ff6b35;
-      --text: #f0f0f0;
-      --muted: #555;
-      --radius: 4px;
+      --bg: #0a0a0a; --border: #222; --accent: #e8ff47;
+      --accent2: #ff6b35; --text: #f0f0f0; --muted: #555; --radius: 4px;
     }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Mono', monospace;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      overflow-x: hidden;
+      background: var(--bg); color: var(--text); font-family: 'Space Mono', monospace;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 24px; overflow-x: hidden;
     }
-
-    /* Noise overlay */
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.4;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
     }
-
-    .wrapper {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 560px;
-    }
-
-    header {
-      margin-bottom: 48px;
-      text-align: center;
-    }
-
+    .wrapper { position: relative; z-index: 1; width: 100%; max-width: 560px; }
+    header { margin-bottom: 48px; text-align: center; }
     .logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: clamp(2rem, 8vw, 3.5rem);
-      letter-spacing: -0.03em;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(2rem, 8vw, 3.5rem); letter-spacing: -0.03em; line-height: 1;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
     }
-
     .logo .from { color: var(--muted); }
-    .logo .arrow {
-      color: var(--accent);
-      font-size: 0.75em;
-      animation: pulse 2s ease-in-out infinite;
-    }
+    .logo .arrow { color: var(--accent); font-size: 0.75em; animation: pulse 2s ease-in-out infinite; }
     .logo .to { color: var(--accent); }
-
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: translateX(0); }
       50% { opacity: 0.6; transform: translateX(3px); }
     }
-
-    .tagline {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    /* Drop zone */
+    .tagline { margin-top: 10px; color: var(--muted); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; }
     #dropzone {
-      border: 1.5px dashed var(--border);
-      border-radius: var(--radius);
-      padding: 48px 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      position: relative;
-      overflow: hidden;
+      border: 1.5px dashed var(--border); border-radius: var(--radius);
+      padding: 48px 24px; text-align: center; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s; position: relative; overflow: hidden;
     }
-
-    #dropzone.hover {
-      border-color: var(--accent);
-      background: rgba(232, 255, 71, 0.03);
-    }
-
-    #dropzone.has-file {
-      border-color: var(--accent2);
-      background: rgba(255, 107, 53, 0.04);
-    }
-
-    #dropzone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-    }
-
-    .drop-icon {
-      font-size: 2.4rem;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .drop-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .drop-sub {
-      font-size: 0.7rem;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-
-    .filename {
-      display: none;
-      margin-top: 10px;
-      font-size: 0.75rem;
-      color: var(--accent2);
-      word-break: break-all;
-    }
-
-    /* Progress */
-    #progress-wrap {
-      display: none;
-      margin-top: 28px;
-    }
-
+    #dropzone.hover { border-color: var(--accent); background: rgba(232,255,71,0.03); }
+    #dropzone.has-file { border-color: var(--accent2); background: rgba(255,107,53,0.04); }
+    #dropzone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .drop-icon { font-size: 2.4rem; margin-bottom: 12px; display: block; }
+    .drop-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .drop-sub { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.05em; }
+    .filename { display: none; margin-top: 10px; font-size: 0.75rem; color: var(--accent2); word-break: break-all; }
+    #progress-wrap { display: none; margin-top: 28px; }
     .progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.68rem;
-      color: var(--muted);
-      margin-bottom: 8px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      display: flex; justify-content: space-between; font-size: 0.68rem;
+      color: var(--muted); margin-bottom: 8px; letter-spacing: 0.08em; text-transform: uppercase;
     }
-
-    .progress-bar {
-      height: 3px;
-      background: var(--border);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
+    .progress-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
     .progress-fill {
-      height: 100%;
-      width: 0%;
+      height: 100%; width: 0%;
       background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width 0.3s ease;
-      border-radius: 2px;
+      transition: width 0.3s ease; border-radius: 2px;
     }
-
-    .status-msg {
-      margin-top: 10px;
-      font-size: 0.68rem;
-      color: var(--muted);
-      min-height: 1.2em;
-      letter-spacing: 0.04em;
-    }
-
-    /* Button */
+    .status-msg { margin-top: 10px; font-size: 0.68rem; color: var(--muted); min-height: 1.2em; letter-spacing: 0.04em; }
     #convert-btn {
-      display: none;
-      width: 100%;
-      margin-top: 20px;
-      padding: 16px;
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: var(--radius);
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 0.95rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      cursor: pointer;
+      display: none; width: 100%; margin-top: 20px; padding: 16px;
+      background: var(--accent); color: #000; border: none; border-radius: var(--radius);
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.95rem;
+      letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
       transition: background 0.15s, transform 0.1s;
     }
-
     #convert-btn:hover { background: #d4eb30; }
     #convert-btn:active { transform: scale(0.99); }
-    #convert-btn:disabled {
-      background: var(--border);
-      color: var(--muted);
-      cursor: not-allowed;
-    }
-
-    /* Download */
+    #convert-btn:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; }
     #download-wrap {
-      display: none;
-      margin-top: 20px;
-      padding: 18px 20px;
-      border: 1.5px solid var(--accent);
-      border-radius: var(--radius);
-      background: rgba(232, 255, 71, 0.04);
-      display: none;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      display: none; margin-top: 20px; padding: 18px 20px;
+      border: 1.5px solid var(--accent); border-radius: var(--radius);
+      background: rgba(232,255,71,0.04);
+      align-items: center; justify-content: space-between; gap: 12px;
     }
-
-    .dl-info {
-      font-size: 0.72rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .dl-info strong {
-      display: block;
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
-      font-size: 0.85rem;
-    }
-
+    .dl-info { font-size: 0.72rem; color: var(--muted); line-height: 1.6; }
+    .dl-info strong { display: block; color: var(--text); font-family: 'Syne', sans-serif; font-size: 0.85rem; }
     #download-btn {
-      flex-shrink: 0;
-      padding: 10px 20px;
-      background: transparent;
-      border: 1.5px solid var(--accent);
-      color: var(--accent);
-      border-radius: var(--radius);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s;
-      white-space: nowrap;
+      flex-shrink: 0; padding: 10px 20px; background: transparent;
+      border: 1.5px solid var(--accent); color: var(--accent); border-radius: var(--radius);
+      font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em;
+      cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; white-space: nowrap;
     }
-
-    #download-btn:hover {
-      background: var(--accent);
-      color: #000;
-    }
-
-    /* Footer */
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 0.62rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      line-height: 1.8;
-    }
-
+    #download-btn:hover { background: var(--accent); color: #000; }
+    footer { margin-top: 40px; text-align: center; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.8; }
     footer span { color: var(--border); }
   </style>
 </head>
@@ -286,16 +100,16 @@
     </header>
 
     <div id="dropzone">
-      <input type="file" id="file-input" accept="video/mp4,.mp4,.m4v,.mov,.avi,.mkv" />
+      <input type="file" id="file-input" accept="video/mp4,.mp4,.m4v,.mov" />
       <span class="drop-icon">🎬</span>
       <div class="drop-title">Drop your video here</div>
-      <div class="drop-sub">or click to browse — MP4, MOV, MKV supported</div>
+      <div class="drop-sub">or click to browse — MP4 / MOV supported</div>
       <div class="filename" id="filename"></div>
     </div>
 
     <div id="progress-wrap">
       <div class="progress-label">
-        <span id="progress-stage">Loading...</span>
+        <span id="progress-stage">Working…</span>
         <span id="progress-pct">0%</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
@@ -314,42 +128,33 @@
 
     <footer>
       Conversion runs entirely in your browser<br/>
-      <span>—</span> no files are sent to any server <span>—</span>
+      <span>—</span> no files sent to any server <span>—</span>
     </footer>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
   <script>
-    // State
     let selectedFile = null;
-    let ffmpeg = null;
-    let ffmpegLoaded = false;
-
-    const dropzone   = document.getElementById('dropzone');
-    const fileInput  = document.getElementById('file-input');
-    const filenameEl = document.getElementById('filename');
-    const convertBtn = document.getElementById('convert-btn');
-    const progressWrap = document.getElementById('progress-wrap');
-    const progressFill = document.getElementById('progress-fill');
+    const dropzone      = document.getElementById('dropzone');
+    const fileInput     = document.getElementById('file-input');
+    const filenameEl    = document.getElementById('filename');
+    const convertBtn    = document.getElementById('convert-btn');
+    const progressWrap  = document.getElementById('progress-wrap');
+    const progressFill  = document.getElementById('progress-fill');
     const progressStage = document.getElementById('progress-stage');
-    const progressPct  = document.getElementById('progress-pct');
-    const statusMsg    = document.getElementById('status-msg');
-    const downloadWrap = document.getElementById('download-wrap');
-    const downloadBtn  = document.getElementById('download-btn');
-    const dlFilename   = document.getElementById('dl-filename');
+    const progressPct   = document.getElementById('progress-pct');
+    const statusMsg     = document.getElementById('status-msg');
+    const downloadWrap  = document.getElementById('download-wrap');
+    const downloadBtn   = document.getElementById('download-btn');
+    const dlFilename    = document.getElementById('dl-filename');
 
-    // Drag events
     dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('hover'); });
     dropzone.addEventListener('dragleave', () => dropzone.classList.remove('hover'));
     dropzone.addEventListener('drop', e => {
-      e.preventDefault();
-      dropzone.classList.remove('hover');
-      const f = e.dataTransfer.files[0];
-      if (f) setFile(f);
+      e.preventDefault(); dropzone.classList.remove('hover');
+      if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
     });
-    fileInput.addEventListener('change', () => {
-      if (fileInput.files[0]) setFile(fileInput.files[0]);
-    });
+    fileInput.addEventListener('change', () => { if (fileInput.files[0]) setFile(fileInput.files[0]); });
 
     function setFile(f) {
       selectedFile = f;
@@ -359,42 +164,13 @@
       convertBtn.style.display = 'block';
       downloadWrap.style.display = 'none';
       progressWrap.style.display = 'none';
-      setProgress(0, '', '');
     }
 
     function setProgress(pct, stage, msg) {
       progressFill.style.width = pct + '%';
-      progressPct.textContent = pct + '%';
+      progressPct.textContent = Math.round(pct) + '%';
       if (stage) progressStage.textContent = stage;
       if (msg !== undefined) statusMsg.textContent = msg;
-    }
-
-    // Load FFmpeg lazily from CDN
-    async function loadFFmpeg() {
-      if (ffmpegLoaded) return;
-      return new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.11.6/ffmpeg.min.js';
-        s.onload = async () => {
-          try {
-            const { createFFmpeg, fetchFile } = FFmpeg;
-            ffmpeg = createFFmpeg({
-              log: false,
-              progress: ({ ratio }) => {
-                const pct = Math.round(ratio * 100);
-                setProgress(40 + Math.round(ratio * 55), 'Converting', `Processing… ${pct}%`);
-              }
-            });
-            setProgress(10, 'Loading engine', 'Downloading FFmpeg.wasm (~25 MB)…');
-            await ffmpeg.load();
-            ffmpegLoaded = true;
-            window._fetchFile = fetchFile;
-            resolve();
-          } catch(e) { reject(e); }
-        };
-        s.onerror = () => reject(new Error('Failed to load FFmpeg from CDN'));
-        document.head.appendChild(s);
-      });
     }
 
     convertBtn.addEventListener('click', async () => {
@@ -402,25 +178,21 @@
       convertBtn.disabled = true;
       downloadWrap.style.display = 'none';
       progressWrap.style.display = 'block';
-      setProgress(0, 'Starting', '');
+      setProgress(0, 'Reading file', 'Loading video…');
 
       try {
-        setProgress(5, 'Loading engine', 'Initializing…');
-        await loadFFmpeg();
-        setProgress(35, 'Reading file', 'Loading video into memory…');
+        const arrayBuffer = await readFile(selectedFile);
+        setProgress(15, 'Decoding audio', 'Decoding audio track…');
 
-        const inputName  = 'input.mp4';
-        const outputName = 'output.mp3';
-        ffmpeg.FS('writeFile', inputName, await window._fetchFile(selectedFile));
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+        setProgress(40, 'Encoding MP3', 'Starting MP3 encoding…');
 
-        setProgress(40, 'Converting', 'Extracting audio…');
-        await ffmpeg.run('-i', inputName, '-vn', '-acodec', 'libmp3lame', '-q:a', '2', outputName);
+        const mp3Blob = await encodeMP3(audioBuffer, pct => {
+          setProgress(40 + pct * 0.55, 'Encoding MP3', 'Encoding… ' + Math.round(pct) + '%');
+        });
 
-        setProgress(97, 'Packaging', 'Almost done…');
-        const data = ffmpeg.FS('readFile', outputName);
-        const blob = new Blob([data.buffer], { type: 'audio/mpeg' });
-        const url  = URL.createObjectURL(blob);
-
+        const url = URL.createObjectURL(mp3Blob);
         const baseName = selectedFile.name.replace(/\.[^.]+$/, '') + '.mp3';
         downloadBtn.href = url;
         downloadBtn.download = baseName;
@@ -428,18 +200,66 @@
 
         setProgress(100, 'Done', 'Conversion complete ✓');
         downloadWrap.style.display = 'flex';
-
-        // Cleanup
-        try { ffmpeg.FS('unlink', inputName); ffmpeg.FS('unlink', outputName); } catch(_) {}
-
-      } catch (err) {
+        await audioCtx.close();
+      } catch(err) {
         setProgress(0, 'Error', '');
-        statusMsg.textContent = '✗ ' + (err.message || 'Something went wrong. Try another file.');
+        statusMsg.textContent = '✗ ' + (err.message || 'Something went wrong.');
         console.error(err);
       }
-
       convertBtn.disabled = false;
     });
+
+    function readFile(file) {
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = e => resolve(e.target.result);
+        r.onerror = reject;
+        r.readAsArrayBuffer(file);
+      });
+    }
+
+    function encodeMP3(audioBuffer, onProgress) {
+      return new Promise(resolve => {
+        const sampleRate  = audioBuffer.sampleRate;
+        const numChannels = Math.min(audioBuffer.numberOfChannels, 2);
+        const encoder     = new lamejs.Mp3Encoder(numChannels, sampleRate, 128);
+        const mp3Data     = [];
+        const left  = floatTo16Bit(audioBuffer.getChannelData(0));
+        const right = numChannels > 1 ? floatTo16Bit(audioBuffer.getChannelData(1)) : left;
+        const chunkSize = 1152;
+        const total = left.length;
+        let offset = 0;
+
+        function next() {
+          const end = Math.min(offset + chunkSize, total);
+          const lChunk = left.subarray(offset, end);
+          const rChunk = right.subarray(offset, end);
+          const encoded = numChannels === 2
+            ? encoder.encodeBuffer(lChunk, rChunk)
+            : encoder.encodeBuffer(lChunk);
+          if (encoded.length > 0) mp3Data.push(new Int8Array(encoded));
+          offset += chunkSize;
+          onProgress((offset / total) * 100);
+          if (offset < total) {
+            setTimeout(next, 0);
+          } else {
+            const final = encoder.flush();
+            if (final.length > 0) mp3Data.push(new Int8Array(final));
+            resolve(new Blob(mp3Data, { type: 'audio/mpeg' }));
+          }
+        }
+        next();
+      });
+    }
+
+    function floatTo16Bit(f32) {
+      const i16 = new Int16Array(f32.length);
+      for (let i = 0; i < f32.length; i++) {
+        const s = Math.max(-1, Math.min(1, f32[i]));
+        i16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+      }
+      return i16;
+    }
   </script>
 </body>
 </html>
